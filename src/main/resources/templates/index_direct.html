@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Catalog</title>
+    
+    <script>
+        // 1. This function runs automatically every time index.html loads in the browser
+        window.onload = function() {
+            alert("Your page has loaded successfully!");
+            loadProductsFromService(); // Triggers product fetching immediately
+        };
+
+        // 2. Fetch products dynamically from your PRODUCT-SERVICE via the Gateway path
+        async function loadProductsFromService() {
+            try {
+                // Adjust '/product-service/api/products' to match your actual product endpoint
+                const response = await fetch('/product-service/api/products'); 
+                if (!response.ok) {
+                    throw new Error('Failed to retrieve products from microservice.');
+                }
+                
+                const products = await response.json();
+                const gridContainer = document.getElementById('product-grid');
+                gridContainer.innerHTML = ''; // Clear out any static text
+
+                if (products.length === 0) {
+                    gridContainer.innerHTML = '<p>No products available at the moment.</p>';
+                    return;
+                }
+
+                // Loop through array and append clean vanilla HTML cards dynamically
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h2>${product.name}</h2>
+                        <p class="category">Category: ${product.category || 'N/A'}</p>
+                        <p>${product.description || 'No description available.'}</p>
+                        <p class="price">$${product.price}</p>
+                        <button class="btn-order" onclick="placeSecureOrder('${product.id}', '${product.name}', ${product.price})">Place Order</button>
+                    `;
+                    gridContainer.appendChild(card);
+                });
+
+            } catch (err) {
+                console.error("Error loading products:", err);
+                document.getElementById('product-grid').innerHTML = '<p style="color:red;">Error: Cannot connect to the Product Microservice via API Gateway.</p>';
+            }
+        }
+
+        // 3. Keep your existing order placement flow intact
+        async function placeSecureOrder(productId, productName, price) {
+            await executeOrderRequest(productId, productName, price);
+        }
+
+        // 4. Fixed typo: changed body variable binding from 'productname' to 'productName'
+        async function executeOrderRequest(productId, productName, price) {
+            try {
+                // Adjust '/orders/create' if your order endpoint routes via an order-service prefix
+                const response = await fetch('/orders/create', { 
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productId: productId, productName: productName, orderAmount: price })
+                });
+                
+                if (response.ok) {
+                    const resultText = await response.text();
+                    alert("Order Status: " + resultText);
+                } else {
+                    alert("Failed to create order at the Order Microservice.");
+                }
+            } catch (err) {
+                alert("Error: Cannot connect to the API Gateway.");
+            }
+        }
+
+        function handleLogout() {
+            alert("Logging out...");
+        }
+    </script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .price { color: green; font-weight: bold; font-size: 1.2em; }
+        .category { font-style: italic; color: #555; }
+        .btn-order { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold;}
+        .btn-order:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+    <div id="user-header" style="background: #e9ecef; padding: 10px; margin-bottom: 20px; display: none; justify-content: space-between; align-items: center; border-radius: 4px;">
+        <span>Welcome back, <strong id="logged-in-user">Guest</strong>!</span>
+        <button onclick="handleLogout()" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Logout</button>
+    </div>
+
+    <h1>Available Products</h1>
+    
+    <!-- JavaScript will dynamically drop the product cards right inside here -->
+    <div class="grid" id="product-grid">
+        <p>Loading products from microservices...</p>
+    </div>
+
+</body>
+</html>

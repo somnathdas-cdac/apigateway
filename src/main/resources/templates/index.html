@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Catalog</title>
+    
+    <script>
+   
+ // This function runs automatically every time index.html loads
+ window.onload = function() {
+    // checkForPendingOrder();
+     alert("Your page has loaded successfully!");
+ };
+
+ async function placeSecureOrder(productId,productname, price) {
+	 
+	 
+		
+     // 2. If token exists, execute the order request directly
+    // await executeOrderRequest(productId, price, token);
+     await executeOrderRequest(productId,productname, price);
+ }
+
+ 
+ //--------------------------------------------------------------------------
+ 
+  async function executeOrderRequest(productId,productName, productPrice) {
+     try {
+    	 
+    	 const response = await fetch('/order-service/orders', { 
+    		    method: 'POST',
+    		    headers: { 
+    		        'Content-Type': 'application/json'
+    		    },
+    		    body: JSON.stringify({ productId: productId, productName:productName, productAmount: productPrice })
+    		});
+    	 
+    	 
+    	 if (response.ok) {
+            // const resultText = await response.text();
+             const orderData = await response.json(); 
+             
+            // alert("Order Status: " + resultText);
+             alert("Success! Order #" + orderData.id + " has been placed. Status: " + orderData.status);
+             // 4. Save order data into LocalStorage so the next HTML page can display it
+             localStorage.setItem("latestOrder", JSON.stringify(orderData));
+          	// 7. Redirect the browser window to your new order-details page
+             window.location.href = "order-details.html";
+         } 
+    	 else {
+    		 const serverMessage = await response.text();
+    		    alert("Server Error: " + serverMessage);
+             
+    		// alert("Failed to create order at the Order Microservice.");
+    	      }
+    	 
+     }catch (err) {
+         alert("Error: Cannot connect to the API Gateway.");
+     }
+ 
+     
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+</script>
+    
+    
+    
+    
+    
+    
+    
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .price { color: green; font-weight: bold; font-size: 1.2em; }
+        .category { font-style: italic; color: #555; }
+        .btn-order { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold;}
+        .btn-order:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+<!-- Insert this inside the <body> at the top of your index.html page -->
+<div id="user-header" style="background: #e9ecef; padding: 10px; margin-bottom: 20px; display: none; justify-content: space-between; align-items: center; border-radius: 4px;">
+    <span>Welcome back, <strong id="logged-in-user">Guest</strong>!</span>
+    <button onclick="handleLogout()" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Logout</button>
+</div>
+
+
+    <h1>Available Products</h1>
+    
+    <div class="grid">
+        <div class="card" th:each="product : ${products}">
+            <!-- Assuming your product object fields match name, category, description, price, and id -->
+            <h2 th:text="${product.name}">Product Name</h2>
+            <p class="category" th:text="'Category: ' + ${product.category}">Category</p>
+            <p th:text="${product.description}">Description</p>
+            <p class="price" th:text="'$' + ${product.price}">$0.00</p>
+            
+            <!-- Added Secure Order Button -->
+           <!--  <button class="btn-order" th:onclick="placeSecureOrder([[${product.id}]], [[${product.price}]])">Place Order</button>-->
+            <button class="btn-order" th:onclick="placeSecureOrder([[${product.id}]],[[${product.name}]], [[${product.price}]])">Place Order</button>
+        </div>
+    </div>
+
+
+</body>
+</html>

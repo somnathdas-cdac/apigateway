@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Catalog</title>
+    
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #ddd;}
+        .user-badge { background-color: #e9ecef; padding: 8px 15px; border-radius: 20px; font-weight: bold; color: #333; display: flex; align-items: center; gap: 10px; }
+        .btn-logout { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.85em; }
+        .login-link { font-weight: bold; color: #0056b3; text-decoration: none; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .price { color: green; font-weight: bold; font-size: 1.2em; }
+        .category { font-style: italic; color: #555; }
+        .btn-order { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold;}
+        .btn-order:hover { background-color: #218838; }
+    </style>
+
+    <script>
+    window.onload = function() {
+        updateUserNavbarUI();
+        checkForPendingOrder(); 
+        loadProducts(); 
+    };
+
+    // Updates header UI to render the user email context
+    /*
+    function updateUserNavbarUI() {
+        const email = localStorage.getItem("logged_in_email");
+        const authDisplay = document.getElementById("auth-display");
+        
+        if (!authDisplay) return;
+
+        if (email) {
+            authDisplay.innerHTML = `
+                <div class="user-badge">
+                    👤 Logged in as: <span>${email}</span>
+                    <button class="btn-logout" onclick="handleLogout()">Logout</button>
+                </div>
+            `;
+        } else {
+            authDisplay.innerHTML = `
+               // <a href="/api/auth/login-page" class="login-link">Login Here</a>
+               window.location.href = "/login.html"
+            `;
+        }
+    }
+    */
+    function updateUserNavbarUI() {
+        const email = localStorage.getItem("logged_in_email");
+        const authDisplay = document.getElementById("auth-display");
+        
+        if (!authDisplay) return;
+
+        if (email) {
+            authDisplay.innerHTML = `
+                <div class="user-badge">
+                    👤 Logged in as: <span>${email}</span>
+                    <button class="btn-logout" onclick="handleLogout()">Logout</button>
+                </div>
+            `;
+        } else {
+            // Corrected: Clean, standard clickable anchor tag linking to your login file
+            authDisplay.innerHTML = `
+                <!--<a href="/login.html" class="login-link">Login Here</a>-->
+                window.location.href = "/login.html"
+            `;
+        }
+    }
+
+    
+    
+    
+    function handleLogout() {
+        localStorage.removeItem("jwt_token");
+        localStorage.removeItem("logged_in_email");
+        window.location.reload();
+    }
+
+    async function loadProducts() {
+        try {
+            const response = await fetch('/product-service/api/products');
+            if (!response.ok) throw new Error("Failed to fetch products.");
+            const products = await response.json();
+            renderProducts(products);
+        } catch (err) {
+            console.error(err);
+            alert("Error: Cannot connect to the Product Microservice through the API Gateway.");
+        }
+    }
+
+    function renderProducts(products) {
+        const gridContainer = document.getElementById("product-grid");
+        gridContainer.innerHTML = ""; 
+
+        products.forEach(product => {
+            const card = document.createElement("div");
+            card.className = "card";
+            const safeName = product.name.replace(/'/g, "\\'");
+
+            card.innerHTML = `
+                <h2>${product.name}</h2>
+                <p class="category">Category: ${product.category}</p>
+                <p>${product.description}</p>
+                <p class="price">$${product.price.toFixed(2)}</p>
+                <button class="btn-order" onclick="placeSecureOrder('${product.id}', '${safeName}', ${product.price})">Place Order</button>
+            `;
+            gridContainer.appendChild(card);
+        });
+    }
+
+    async function placeSecureOrder(productId, productName, price) { 
+        const token = localStorage.getItem("jwt_token"); 
+        
+        if (!token) { 
+            alert("You must be logged in to place an order! Redirecting to login page..."); 
+            localStorage.setItem("pending_product_id", productId); 
+            localStorage.setItem("pending_product_name", productName); 
+            localStorage.setItem("pending_product_price", price); 
+            window.location.href = "/api/auth/login-page"; 
+            return; 
+        } 
+        await executeOrderRequest(productId, productName, price, token); 
+    } 
+
+    async function executeOrderRequest(productId, productName, productPrice, token) {
+        try {
+            const response = await fetch('/order-service/orders', { 
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ productId: productId, productName: productName, productAmount: productPrice })
+            });
+         
+            if (response.status === 401 || response.status === 403) {
+                alert("Session expired. Please log in again.");
+                handleLogout();
+            } else if (response.ok) {
+                const orderData = await response.json(); 
+                alert("Success! Order #" + orderData.id + " has been placed.");
+                localStorage.setItem("latestOrder", JSON.stringify(orderData));
+                window.location.href = "order-details.html";
+            } else {
+                const serverMessage = await response.text();
+                alert("Server Error: " + serverMessage);
+            }
+        } catch (err) {
+            alert("Error: Cannot connect to the API Gateway.");
+        }
+    }
+
+    async function checkForPendingOrder() { 
+        const token = localStorage.getItem("jwt_token"); 
+        const pendingId = localStorage.getItem("pending_product_id"); 
+        const pendingName = localStorage.getItem("pending_product_name"); 
+        const pendingPrice = localStorage.getItem("pending_product_price"); 
+        
+        if (token && pendingId && pendingName && pendingPrice) { 
+            alert("Processing your pending order now..."); 
+            localStorage.removeItem("pending_product_id");
+            localStorage.removeItem("pending_product_name");
+            localStorage.removeItem("pending_product_price");
+            await executeOrderRequest(pendingId, pendingName, parseFloat(pendingPrice), token); 
+        } 
+    }
+    </script>
+</head>
+<body>
+
+    <div class="header-bar">
+        <h1>Available Products</h1>
+        <div id="auth-display"></div>
+    </div>
+    
+    <div class="grid" id="product-grid">
+        <p>Loading products...</p>
+    </div>
+
+</body>
+</html>

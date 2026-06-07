@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Catalog</title>
+    
+    <script>
+    // Runs automatically when the page loads
+    window.onload = function() {
+        alert("Your page has loaded successfully!");
+        loadProducts(); // Fetch and render products dynamically
+    };
+
+    // Fetch products directly through the API Gateway routing mechanism
+    async function loadProducts() {
+        try {
+            // Using '/product-service' route managed by your API Gateway
+            const response = await fetch('/product-service/api/products');
+            
+            if (!response.ok) {
+                throw new Error("Failed to fetch products from service.");
+            }
+            
+            const products = await response.json();
+            
+            renderProducts(products);
+        } catch (err) {
+            console.error(err);
+            alert("Error: Cannot connect to the Product Microservice through the API Gateway.");
+        }
+    }
+
+    // Dynamic Client-side Rendering
+    function renderProducts(products) {
+        const gridContainer = document.getElementById("product-grid");
+        gridContainer.innerHTML = ""; // Clear any placeholder text
+
+        products.forEach(product => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            card.innerHTML = `
+                <h2>${product.name}</h2>
+                <p class="category">Category: ${product.category}</p>
+                <p>${product.description}</p>
+                <p class="price">$${product.price.toFixed(2)}</p>
+                <button class="btn-order" onclick="placeSecureOrder('${product.id}', '${product.name.replace(/'/g, "\\'")}', ${product.price})">Place Order</button>
+            `;
+            gridContainer.appendChild(card);
+        });
+    }
+
+    async function placeSecureOrder(productId, productName, price) {
+        await executeOrderRequest(productId, productName, price);
+    }
+
+    async function executeOrderRequest(productId, productName, productPrice) {
+        try {
+            const response = await fetch('/order-service/orders', { 
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId: productId, productName: productName, productAmount: productPrice })
+            });
+         
+            if (response.ok) {
+                const orderData = await response.json(); 
+                alert("Success! Order #" + orderData.id + " has been placed. Status: " + orderData.status);
+                localStorage.setItem("latestOrder", JSON.stringify(orderData));
+                window.location.href = "order-details.html";
+            } else {
+                const serverMessage = await response.text();
+                alert("Server Error: " + serverMessage);
+            }
+        } catch (err) {
+            alert("Error: Cannot connect to the API Gateway.");
+        }
+    }
+    </script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .price { color: green; font-weight: bold; font-size: 1.2em; }
+        .category { font-style: italic; color: #555; }
+        .btn-order { background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; margin-top: 10px; width: 100%; font-weight: bold;}
+        .btn-order:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+<div id="user-header" style="background: #e9ecef; padding: 10px; margin-bottom: 20px; display: none; justify-content: space-between; align-items: center; border-radius: 4px;">
+    <span>Welcome back, <strong id="logged-in-user">Guest</strong>!</span>
+    <button onclick="handleLogout()" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Logout</button>
+</div>
+
+    <h1>Available Products</h1>
+    
+    <!-- Target Container filled dynamically by JavaScript -->
+    <div class="grid" id="product-grid">
+        <p>Loading products...</p>
+    </div>
+
+</body>
+</html>

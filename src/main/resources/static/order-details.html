@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Summary & Payment</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .receipt-card { border: 1px solid #ccc; padding: 30px; border-radius: 8px; background: white; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .highlight { font-weight: bold; color: #28a745; }
+        .btn-pay { background-color: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1.1em; font-weight: bold; margin-top: 20px;}
+        .btn-pay:hover { background-color: #0056b3; }
+    </style>
+    <script>
+        // Runs immediately when this details page loads
+        window.onload = function() {
+            const storedData = localStorage.getItem("latestOrder");
+            if (!storedData) {
+                alert("No order details found!");
+                window.location.href = "index.html"; // Redirect back home if empty
+                return;
+            }
+
+            const order = JSON.parse(storedData);
+
+            // Populate HTML text spaces dynamically
+            document.getElementById("disp-order-id").innerText = order.id;
+            document.getElementById("disp-product").innerText = order.productName;
+            document.getElementById("disp-quantity").innerText = order.quantity;
+            document.getElementById("disp-price").innerText = "$" + order.totalPrice.toFixed(2);
+            document.getElementById("disp-status").innerText = order.status;
+            document.getElementById("disp-user-email").innerText = order.email; //new additions
+        };
+
+        // Processes payment request through the microservice gateway client route
+        async function processPayment() {
+            const order = JSON.parse(localStorage.getItem("latestOrder"));
+            
+            try {
+                // Call your Payment Service endpoint via API Gateway route
+               // const response = await fetch('/payment-service/payments', {
+                const response = await fetch('/payment-service/api/payments/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        orderId: order.id, 
+                        amount: order.totalPrice,
+                        productId: 1, // FIXED: Sent required productId field
+                        userEmail: order.email
+                    })
+                });
+
+                if (response.ok) {
+                    alert("Payment Processed Successfully!");
+                    localStorage.removeItem("latestOrder"); // Clear out storage
+                    window.location.href = "index.html";   // Return to catalog
+                } else {
+                    alert("Payment Failed at checkout gateway.");
+                }
+            } catch (err) {
+                alert("Network error: Failed to reach Payment Microservice.");
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="receipt-card">
+    <!-- Inside <div class="receipt-card"> on your page -->
+<p><strong>Logged in User:</strong> <span id="disp-user-email" style="color: blue;"></span></p>
+    
+        <h2>Order Confirmation Summary</h2>
+        <hr>
+        <p><strong>Order ID:</strong> <span id="disp-order-id"></span></p>
+        <p><strong>Product Item:</strong> <span id="disp-product"></span></p>
+        <p><strong>Quantity Ordered:</strong> <span id="disp-quantity"></span></p>
+        <p><strong>Total Amount Due:</strong> <span id="disp-price" class="highlight"></span></p>
+        <p><strong>Current Status:</strong> <span id="disp-status" style="color: blue; font-weight: bold;"></span></p>
+        
+        <!-- Payment Trigger Button Link to payment-service -->
+        <button class="btn-pay" onclick="processPayment()">Proceed to Secure Payment</button>
+    </div>
+
+</body>
+</html>

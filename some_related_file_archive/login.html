@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gateway Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f6f9; margin: 0; }
+        .login-box { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 300px; }
+        h2 { margin-bottom: 20px; text-align: center; color: #333; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; border: none; color: white; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+    </style>
+    <script>
+        async function handleLoginSubmit(event) {
+            event.preventDefault();
+            // 1. Capture the email value from the form
+            const emailInput = document.getElementById("email").value;
+            const passwordInput = document.getElementById("password").value;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    // 2. Changed JSON key payload from 'username' to 'email'
+                    body: JSON.stringify({ email: emailInput, password: passwordInput })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // 3. Save the JWT token and the email string into browser memory
+                    localStorage.setItem("jwt_token", data.token);
+                    localStorage.setItem("logged_in_user", emailInput); 
+                    
+                    alert("Login Successful! Redirecting to products page...");
+                    window.location.href = "/index.html";
+                } else {
+                    alert("Authentication Failed: Invalid credentials.");
+                }
+            } catch (err) {
+                alert("Error connecting to login security service.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Account Login</h2>
+        <form onsubmit="handleLoginSubmit(event)">
+            <!-- 4. Switched input type to 'email' for validation and updated placeholder text -->
+            <input type="email" id="email" placeholder="Enter Email Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+</body>
+</html>
