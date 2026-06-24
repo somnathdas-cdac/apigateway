@@ -1,101 +1,61 @@
-2026-06-06T22:53:17.237+05:30  INFO 27020 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Starting ApigatewayApplication using Java 21.0.10 with PID 27020 (D:\SpringInitializr\The_Zipped\MicroService-Individual\apigateway\target\classes started by SOMENATH in D:\SpringInitializr\The_Zipped\MicroService-Individual\apigateway)
-2026-06-06T22:53:17.240+05:30 DEBUG 27020 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Running with Spring Boot v3.5.14, Spring v6.2.18
-2026-06-06T22:53:17.240+05:30  INFO 27020 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : No active profile set, falling back to 1 default profile: "default"
-2026-06-06T22:53:18.238+05:30  INFO 27020 --- [apigateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
-2026-06-06T22:53:18.330+05:30  INFO 27020 --- [apigateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 85 ms. Found 1 R2DBC repository interface.
-2026-06-06T22:53:18.471+05:30  INFO 27020 --- [apigateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=665da5e0-29d5-3337-a7e9-341b6b978059
-2026-06-06T22:53:19.517+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2026-06-06T22:53:19.517+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2026-06-06T22:53:19.517+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2026-06-06T22:53:19.517+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2026-06-06T22:53:19.517+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2026-06-06T22:53:19.517+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2026-06-06T22:53:19.517+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2026-06-06T22:53:19.518+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2026-06-06T22:53:19.518+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2026-06-06T22:53:19.518+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2026-06-06T22:53:19.518+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2026-06-06T22:53:19.518+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2026-06-06T22:53:19.519+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2026-06-06T22:53:19.519+05:30  INFO 27020 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2026-06-06T22:53:19.726+05:30  INFO 27020 --- [apigateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-06-06T22:53:20.030+05:30  INFO 27020 --- [apigateway] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
-2026-06-06T22:53:20.131+05:30  WARN 27020 --- [apigateway] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
-2026-06-06T22:53:20.445+05:30  INFO 27020 --- [apigateway] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
-2026-06-06T22:53:20.589+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
-2026-06-06T22:53:20.614+05:30  INFO 27020 --- [apigateway] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2026-06-06T22:53:20.649+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
-2026-06-06T22:53:20.649+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
-2026-06-06T22:53:20.649+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
-2026-06-06T22:53:20.649+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
-2026-06-06T22:53:20.649+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
-2026-06-06T22:53:20.654+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
-2026-06-06T22:53:20.655+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
-2026-06-06T22:53:22.048+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
-2026-06-06T22:53:22.057+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
-2026-06-06T22:53:22.066+05:30  INFO 27020 --- [apigateway] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
-2026-06-06T22:53:22.070+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1780766602070 with initial instances count: 2
-2026-06-06T22:53:22.088+05:30  INFO 27020 --- [apigateway] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application APIGATEWAY with eureka with status UP
-2026-06-06T22:53:22.088+05:30  INFO 27020 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1780766602088, current=UP, previous=STARTING]
-2026-06-06T22:53:22.095+05:30  INFO 27020 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080: registering service...
-2026-06-06T22:53:22.266+05:30  INFO 27020 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080 - registration status: 204
-2026-06-06T22:53:22.911+05:30  INFO 27020 --- [apigateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
-2026-06-06T22:53:22.921+05:30  INFO 27020 --- [apigateway] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8080
-2026-06-06T22:53:23.023+05:30  INFO 27020 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Started ApigatewayApplication in 6.08 seconds (process running for 6.74)
-2026-06-06T22:58:20.672+05:30  INFO 27020 --- [apigateway] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2026-06-06T23:00:20.663+05:30  INFO 27020 --- [apigateway] [RMI TCP Connection(19)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
-2026-06-06T23:00:20.666+05:30  INFO 27020 --- [apigateway] [RMI TCP Connection(19)-127.0.0.1] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application APIGATEWAY with eureka with status DOWN
-2026-06-06T23:00:20.666+05:30  INFO 27020 --- [apigateway] [RMI TCP Connection(19)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1780767020666, current=DOWN, previous=UP]
-2026-06-06T23:00:20.667+05:30  INFO 27020 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080: registering service...
-2026-06-06T23:00:20.672+05:30  INFO 27020 --- [apigateway] [RMI TCP Connection(19)-127.0.0.1] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
-2026-06-06T23:00:20.677+05:30  INFO 27020 --- [apigateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
-2026-06-06T23:00:20.682+05:30  INFO 27020 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080 - registration status: 204
-2026-06-06T23:00:22.799+05:30  INFO 27020 --- [apigateway] [RMI TCP Connection(19)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
-2026-06-06T23:00:25.813+05:30  INFO 27020 --- [apigateway] [RMI TCP Connection(19)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : Unregistering ...
-2026-06-06T23:00:25.813+05:30  WARN 27020 --- [apigateway] [DiscoveryClient-%d] c.netflix.discovery.TimedSupervisorTask  : task supervisor shutting down, can't accept the task
-2026-06-06T23:00:25.837+05:30  INFO 27020 --- [apigateway] [RMI TCP Connection(19)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080 - deregister  status: 200
-2026-06-06T23:00:25.837+05:30  INFO 27020 --- [apigateway] [RMI TCP Connection(19)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
-2026-06-06T23:00:28.538+05:30  INFO 8060 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Starting ApigatewayApplication using Java 21.0.10 with PID 8060 (D:\SpringInitializr\The_Zipped\MicroService-Individual\apigateway\target\classes started by SOMENATH in D:\SpringInitializr\The_Zipped\MicroService-Individual\apigateway)
-2026-06-06T23:00:28.540+05:30 DEBUG 8060 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Running with Spring Boot v3.5.14, Spring v6.2.18
-2026-06-06T23:00:28.541+05:30  INFO 8060 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : No active profile set, falling back to 1 default profile: "default"
-2026-06-06T23:00:29.292+05:30  INFO 8060 --- [apigateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
-2026-06-06T23:00:29.373+05:30  INFO 8060 --- [apigateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 76 ms. Found 1 R2DBC repository interface.
-2026-06-06T23:00:29.522+05:30  INFO 8060 --- [apigateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=665da5e0-29d5-3337-a7e9-341b6b978059
-2026-06-06T23:00:30.279+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2026-06-06T23:00:30.279+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2026-06-06T23:00:30.279+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2026-06-06T23:00:30.279+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2026-06-06T23:00:30.279+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2026-06-06T23:00:30.279+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2026-06-06T23:00:30.280+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2026-06-06T23:00:30.280+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2026-06-06T23:00:30.280+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2026-06-06T23:00:30.280+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2026-06-06T23:00:30.280+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2026-06-06T23:00:30.280+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2026-06-06T23:00:30.281+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2026-06-06T23:00:30.281+05:30  INFO 8060 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2026-06-06T23:00:30.431+05:30  INFO 8060 --- [apigateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2026-06-06T23:00:30.587+05:30  INFO 8060 --- [apigateway] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
-2026-06-06T23:00:30.606+05:30  WARN 8060 --- [apigateway] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
-2026-06-06T23:00:30.668+05:30  INFO 8060 --- [apigateway] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
-2026-06-06T23:00:30.685+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
-2026-06-06T23:00:30.687+05:30  INFO 8060 --- [apigateway] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
-2026-06-06T23:00:30.693+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
-2026-06-06T23:00:30.693+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
-2026-06-06T23:00:30.693+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
-2026-06-06T23:00:30.693+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
-2026-06-06T23:00:30.693+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
-2026-06-06T23:00:30.693+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
-2026-06-06T23:00:30.694+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
-2026-06-06T23:00:30.948+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
-2026-06-06T23:00:30.949+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
-2026-06-06T23:00:30.950+05:30  INFO 8060 --- [apigateway] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
-2026-06-06T23:00:30.952+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1780767030951 with initial instances count: 3
-2026-06-06T23:00:30.954+05:30  INFO 8060 --- [apigateway] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application APIGATEWAY with eureka with status UP
-2026-06-06T23:00:30.955+05:30  INFO 8060 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1780767030955, current=UP, previous=STARTING]
-2026-06-06T23:00:30.956+05:30  INFO 8060 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080: registering service...
-2026-06-06T23:00:30.993+05:30  INFO 8060 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080 - registration status: 204
-2026-06-06T23:00:31.098+05:30  INFO 8060 --- [apigateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
-2026-06-06T23:00:31.100+05:30  INFO 8060 --- [apigateway] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8080
-2026-06-06T23:00:31.131+05:30  INFO 8060 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Started ApigatewayApplication in 2.857 seconds (process running for 3.408)
+2026-06-20T17:40:14.000+05:30  INFO 2904 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Starting ApigatewayApplication using Java 21.0.10 with PID 2904 (D:\SpringInitializr\The_Zipped\MicroService-Individual\apigateway\target\classes started by SOMENATH in D:\SpringInitializr\The_Zipped\MicroService-Individual\apigateway)
+2026-06-20T17:40:14.004+05:30 DEBUG 2904 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Running with Spring Boot v3.5.14, Spring v6.2.18
+2026-06-20T17:40:14.004+05:30  INFO 2904 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-06-20T17:40:14.958+05:30  INFO 2904 --- [apigateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-06-20T17:40:15.046+05:30  INFO 2904 --- [apigateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 81 ms. Found 1 R2DBC repository interface.
+2026-06-20T17:40:15.210+05:30  INFO 2904 --- [apigateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=665da5e0-29d5-3337-a7e9-341b6b978059
+2026-06-20T17:40:16.214+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2026-06-20T17:40:16.214+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2026-06-20T17:40:16.214+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2026-06-20T17:40:16.214+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2026-06-20T17:40:16.215+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2026-06-20T17:40:16.215+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2026-06-20T17:40:16.215+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2026-06-20T17:40:16.215+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2026-06-20T17:40:16.215+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2026-06-20T17:40:16.215+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2026-06-20T17:40:16.216+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2026-06-20T17:40:16.216+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2026-06-20T17:40:16.216+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2026-06-20T17:40:16.216+05:30  INFO 2904 --- [apigateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2026-06-20T17:40:16.402+05:30  INFO 2904 --- [apigateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-20T17:40:16.586+05:30  INFO 2904 --- [apigateway] [main] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2026-06-20T17:40:16.612+05:30  WARN 2904 --- [apigateway] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-06-20T17:40:16.659+05:30  INFO 2904 --- [apigateway] [main] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2026-06-20T17:40:16.677+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2026-06-20T17:40:16.680+05:30  INFO 2904 --- [apigateway] [main] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-06-20T17:40:16.699+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2026-06-20T17:40:16.699+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2026-06-20T17:40:16.699+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2026-06-20T17:40:16.699+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2026-06-20T17:40:16.699+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2026-06-20T17:40:16.699+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2026-06-20T17:40:16.699+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2026-06-20T17:40:16.977+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2026-06-20T17:40:16.979+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2026-06-20T17:40:16.980+05:30  INFO 2904 --- [apigateway] [main] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-06-20T17:40:16.982+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1781957416981 with initial instances count: 3
+2026-06-20T17:40:16.985+05:30  INFO 2904 --- [apigateway] [main] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application APIGATEWAY with eureka with status UP
+2026-06-20T17:40:16.986+05:30  INFO 2904 --- [apigateway] [main] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1781957416986, current=UP, previous=STARTING]
+2026-06-20T17:40:16.987+05:30  INFO 2904 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080: registering service...
+2026-06-20T17:40:17.085+05:30  INFO 2904 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080 - registration status: 204
+2026-06-20T17:40:17.258+05:30  INFO 2904 --- [apigateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2026-06-20T17:40:17.259+05:30  INFO 2904 --- [apigateway] [main] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8080
+2026-06-20T17:40:17.283+05:30  INFO 2904 --- [apigateway] [main] c.m.e.apigateway.ApigatewayApplication   : Started ApigatewayApplication in 3.605 seconds (process running for 4.23)
+2026-06-20T17:45:16.703+05:30  INFO 2904 --- [apigateway] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-06-20T17:50:16.719+05:30  INFO 2904 --- [apigateway] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-06-20T17:55:16.723+05:30  INFO 2904 --- [apigateway] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-06-20T18:00:16.728+05:30  INFO 2904 --- [apigateway] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-06-20T18:05:16.731+05:30  INFO 2904 --- [apigateway] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-06-20T18:10:16.738+05:30  INFO 2904 --- [apigateway] [AsyncResolver-bootstrap-executor-%d] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2026-06-20T18:11:04.635+05:30  INFO 2904 --- [apigateway] [RMI TCP Connection(43)-127.0.0.1] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2026-06-20T18:11:04.636+05:30  INFO 2904 --- [apigateway] [RMI TCP Connection(43)-127.0.0.1] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application APIGATEWAY with eureka with status DOWN
+2026-06-20T18:11:04.637+05:30  INFO 2904 --- [apigateway] [RMI TCP Connection(43)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1781959264637, current=DOWN, previous=UP]
+2026-06-20T18:11:04.637+05:30  INFO 2904 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080: registering service...
+2026-06-20T18:11:04.639+05:30  INFO 2904 --- [apigateway] [RMI TCP Connection(43)-127.0.0.1] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-20T18:11:04.642+05:30  INFO 2904 --- [apigateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2026-06-20T18:11:04.651+05:30  INFO 2904 --- [apigateway] [DiscoveryClient-InstanceInfoReplicator-%d] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080 - registration status: 204
+2026-06-20T18:11:06.760+05:30  INFO 2904 --- [apigateway] [RMI TCP Connection(43)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2026-06-20T18:11:09.762+05:30  INFO 2904 --- [apigateway] [RMI TCP Connection(43)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2026-06-20T18:11:09.779+05:30  INFO 2904 --- [apigateway] [RMI TCP Connection(43)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_APIGATEWAY/LAPTOP-R7OQ42VU:apigateway:8080 - deregister  status: 200
+2026-06-20T18:11:09.780+05:30  INFO 2904 --- [apigateway] [RMI TCP Connection(43)-127.0.0.1] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
