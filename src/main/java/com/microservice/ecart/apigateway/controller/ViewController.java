@@ -119,7 +119,8 @@ public class ViewController {
 
     import java.util.Map;
 
-    // Correct Custom Class Imports
+import com.microservice.ecart.apigateway.model.UserApp;
+// Correct Custom Class Imports
     import com.microservice.ecart.apigateway.repository.UserAppRepository;
     import com.microservice.ecart.apigateway.util.JwtUtil; // Adjust this package declaration if your JwtUtil is located elsewhere
 
@@ -130,11 +131,19 @@ public class ViewController {
 
         private final UserAppRepository userAppRepository;
         private final JwtUtil jwtUtil;
+        
+        
+        
 
         public ViewController(UserAppRepository userAppRepository, JwtUtil jwtUtil) {
             this.userAppRepository = userAppRepository;
             this.jwtUtil = jwtUtil;
         }
+        
+        
+        
+        
+        
 
         // Programmatic endpoint processing JSON requests continues to work seamlessly
         @PostMapping("/api/auth/login")
@@ -159,13 +168,56 @@ public class ViewController {
                 .defaultIfEmpty(ResponseEntity.status(HttpStatus.UNAUTHORIZED) 
                     .body(Map.of("error", "User not found"))); 
         }
-    }
+    
 
         
+    @PostMapping("/api/auth/register")
+    @ResponseBody
+    public Mono<ResponseEntity<Map<String, String>>> register(@RequestBody Map<String, String> request) {
+        String username = request.get("username");
+        String email = request.get("email");
+        String password = request.get("password");
+        String address = request.get("address");
+        String mobileNo = request.get("mobile_no");
+
+        if (username == null || username.isBlank() || 
+            email == null || email.isBlank() || 
+            password == null || password.isBlank()) {
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Username, email, and password are required fields")));
+        }
+
+        return userAppRepository.findByEmail(email)
+                .flatMap(existingUser -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(Map.of("error", "This email address is already registered"))))
+                .switchIfEmpty(Mono.defer(() -> {
+                    // Initialize entity matching your repository constraints
+                    UserApp newUser = new UserApp();
+                    newUser.setUsername(username);
+                    newUser.setEmail(email);
+                    newUser.setPassword(password); // Remember to encode this in production environments!
+                    newUser.setAddress(address);
+                    newUser.setMobile_no(mobileNo);
+                    
+                    return userAppRepository.save(newUser)
+                            .map(savedUser -> ResponseEntity.status(HttpStatus.CREATED)
+                                    .body(Map.of("message", "User registered successfully")));
+                }));
+    }
+ 
+       
+    /*
+    @GetMapping("/register")
+    public String registerPage() {
+        return "register"; // Resolves to register.html
+    }
+    */
+    
+    
+    
+    
         
-        
-        
-        
+    }//class end.......     
         
         
         /*
