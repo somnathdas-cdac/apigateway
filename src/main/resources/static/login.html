@@ -54,7 +54,8 @@ async function performLogin() {
 
     try { 
         // Sends email and password payload to Gateway auth endpoint
-        const response = await fetch('/api/auth/login', { 
+       // const response = await fetch('/api/auth/login', { 
+        const response = await fetch('/apiGateway-service/api/auth/login', { 	
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify({ email: emailInput, password: passwordInput }) 
@@ -64,6 +65,9 @@ async function performLogin() {
  
         if (response.ok) { 
             // Persist token and email in local memory
+            
+            
+            
             localStorage.setItem("jwt_token", data.token); 
             localStorage.setItem("logged_in_email", data.email); 
  

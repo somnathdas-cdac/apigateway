@@ -46,6 +46,19 @@ public class JwtUtil {
     /**
      * Verifies the cryptographic integrity and structure of an incoming token string.
      */
+    
+    
+    
+    
+    /*
+    public boolean extractName( String token)
+    {
+    	return false;
+    }
+    */
+    
+    
+    
     public boolean validateToken(final String token) {
         try {
             Jwts.parser()

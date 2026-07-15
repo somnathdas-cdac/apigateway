@@ -131,18 +131,26 @@ import com.microservice.ecart.apigateway.model.UserApp;
 
         private final UserAppRepository userAppRepository;
         private final JwtUtil jwtUtil;
+        private final WebClient.Builder webClientBuilder; // webClient builder is acted by S Das 0n 07-26
         
         
         
 
+        public ViewController(UserAppRepository userAppRepository, JwtUtil jwtUtil,WebClient.Builder webClientBuilder) {
+            this.userAppRepository = userAppRepository;
+            this.jwtUtil = jwtUtil;
+            this.webClientBuilder = webClientBuilder;
+        }
+        
+        //below constructor is ok..........
+        
+        /*
         public ViewController(UserAppRepository userAppRepository, JwtUtil jwtUtil) {
             this.userAppRepository = userAppRepository;
             this.jwtUtil = jwtUtil;
         }
         
-        
-        
-        
+        */
         
 
         // Programmatic endpoint processing JSON requests continues to work seamlessly
@@ -169,7 +177,19 @@ import com.microservice.ecart.apigateway.model.UserApp;
                     .body(Map.of("error", "User not found"))); 
         }
     
-
+/*******
+ * 
+ * 
+ * 
+ * Below is For New  User register
+ * 
+ * 
+ * @param request
+ * @return
+ */
+        
+        
+        
         
     @PostMapping("/api/auth/register")
     @ResponseBody

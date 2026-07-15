@@ -19,12 +19,36 @@
     </style>
 
     <script>
+    
+    /********
+    
+    Here the on load function
+    
+    **********
+    
+    */
+    
+    
+    
+    
+    
     window.onload = function() {
         updateUserNavbarUI();
         checkForPendingOrder(); 
         loadProducts(); 
     };
 
+   
+    /*********
+    
+    
+    
+    Log in and Logout section............
+    
+    *************************
+    
+    */
+    
     // ✅ FIXED: Renders a normal login button link if guest
     function updateUserNavbarUI() {
         const email = localStorage.getItem("logged_in_email");
@@ -47,24 +71,67 @@
         }
     }
     
+    
+    /********
+    
+       Below Handel Logout function   and remove Jwt token
+       
+       
+       
+       ************************************************
+       
+     */
+     
+     
+     
+     
+    
+    
     function handleLogout() {
         localStorage.removeItem("jwt_token");
         localStorage.removeItem("logged_in_email");
         window.location.reload();
     }
+    
+    
+    
+    /*******
+    
+    
+    
+       Below Load the  Product from product Service..........
+       
+       
+       
+       ****************************************************
+       
+    
+    
+    */
 
     async function loadProducts() {
         try {
             const response = await fetch('/product-service/api/products');
             if (!response.ok) throw new Error("Failed to fetch products.");
             const products = await response.json();
-            renderProducts(products);
+            renderProducts(products); // call rendered product function to display and Select.......
         } catch (err) {
             console.error(err);
             alert("Error: Cannot connect to the Product Microservice through the API Gateway.");
         }
     }
 
+    
+    /***********
+    
+     Rendered Product And Display
+     
+     
+     ************************************8
+     
+     */
+    
+    
     function renderProducts(products) {
         const gridContainer = document.getElementById("product-grid");
         gridContainer.innerHTML = ""; 
@@ -84,6 +151,21 @@
             gridContainer.appendChild(card);
         });
     }
+    
+    
+    /*********
+    
+    
+    Here Ordered are placed..........
+    
+    
+    
+    ****
+    
+    */
+    
+    
+    
 
     // ✅ FIXED: Routes to static file path instead of Java controller endpoint
     async function placeSecureOrder(productId, productName, price) { 
@@ -99,9 +181,26 @@
             window.location.href = "/login.html"; 
             return; 
         } 
+        
+       
         await executeOrderRequest(productId, productName, price, token); 
     } 
-
+    
+    
+    
+    /********
+    
+    Execute Order & Request........... to call the  order service..............
+    
+    ****
+    
+   */
+    
+    
+    
+    
+    
+    
     async function executeOrderRequest(productId, productName, productPrice, token) {
         try {
             const response = await fetch('/order-service/orders', { 
@@ -117,11 +216,19 @@
             if (response.status === 401 || response.status === 403) {
                 alert("Session expired. Please log in again.");
                 handleLogout();
+                
+                
             } else if (response.ok) {
+            	
+            	//--------------Store the data at below for further executions.....------------------
                 const orderData = await response.json(); 
                 alert("Success! Order #" + orderData.id + " has been placed.");
                 localStorage.setItem("latestOrder", JSON.stringify(orderData));
                 window.location.href = "order-details.html";
+                
+                //-------------------------------
+                
+                
             } else {
                 const serverMessage = await response.text();
                 alert("Server Error: " + serverMessage);
@@ -130,6 +237,18 @@
             alert("Error: Cannot connect to the API Gateway.");
         }
     }
+    
+    
+    
+    
+    /*********
+    
+    Check their, if any pending order...........
+    
+    
+    ********
+    
+    */
 
     async function checkForPendingOrder() { 
         const token = localStorage.getItem("jwt_token"); 
@@ -146,13 +265,23 @@
         } 
     }
     </script>
+
+
+
 </head>
+
+
+
+
+
+
 <body>
 
     <div class="header-bar">
         <h1>Available Products</h1>
         <div id="auth-display"></div>
     </div>
+    
     
     <div class="grid" id="product-grid">
         <p>Loading products...</p>

@@ -10,63 +10,37 @@
         .btn-pay { background-color: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1.1em; font-weight: bold; margin-top: 20px;}
         .btn-pay:hover { background-color: #0056b3; }
     </style>
-    
-    <script src="https://stripe.com"></script>
-    
     <script>
         // Runs immediately when this details page loads
         window.onload = function() {
-        	
             const storedData = localStorage.getItem("latestOrder");
-            const storedUserMailId=localStorage.getItem("logged_in_email");
-            
-            
-            // if no stored data then..........
-            
             if (!storedData) {
                 alert("No order details found!");
                 window.location.href = "index.html"; // Redirect back home if empty
                 return;
             }
-            
-            // if no email id  stored  in local storage.........
-            
-            if(!storedUserMailId)
-            {
-            	alert("No email Id  details found!");
-            	 window.location.href = "login.html";
-            	 return;
-            }
 
             const order = JSON.parse(storedData);
-            
-            
-            document.getElementById("disp-user-email").innerText=storedUserMailId;//By somenath Das........
+
             // Populate HTML text spaces dynamically
             document.getElementById("disp-order-id").innerText = order.id;
             document.getElementById("disp-product").innerText = order.productName;
             document.getElementById("disp-quantity").innerText = order.quantity;
             document.getElementById("disp-price").innerText = "$" + order.totalPrice.toFixed(2);
             document.getElementById("disp-status").innerText = order.status;
-           // document.getElementById("disp-user-email").innerText = order.email; //new additions
+            document.getElementById("disp-user-email").innerText = order.email; //new additions
         };
-        
-        
-        
-        
-        
 
         // Processes payment request through the microservice gateway client route
         async function processPayment() {
             const order = JSON.parse(localStorage.getItem("latestOrder"));
-            const token = localStorage.getItem("jwt_token"); //it is stored at lacal at login page 
             
             try {
                 // Call your Payment Service endpoint via API Gateway route
                // const response = await fetch('/payment-service/payments', {
                 const response = await fetch('/payment-service/api/payments/process', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' ,'Authorization': `Bearer ${token}` },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         orderId: order.id, 
                         amount: order.totalPrice,
@@ -76,25 +50,9 @@
                 });
 
                 if (response.ok) {
-                  
-                	const paymentResult = await response.json(); 
-                	
-                	//alert("Payment Processed Successfully!");
-                	
-                	alert("Payment Successful!\nOrder ID: " + paymentResult.orderId + "\nProduct ID: " + paymentResult.productId + "\nAmount: $" + paymentResult.amount);
-                	               	
-                	               	
-                	
-                   // localStorage.removeItem("latestOrder"); // Clear out storage
-                   // window.location.href = "index.html";   // Return to catalog
-                   
-                	 const targetUrl = `payment.html?orderId=${paymentResult.orderId}&productId=${paymentResult.productId}&amount=${paymentResult.amount}`;
-                	    
-                	    // Redirect the browser to the new page
-                	    window.location.href = targetUrl;
-                   
-                   
-                   
+                    alert("Payment Processed Successfully!");
+                    localStorage.removeItem("latestOrder"); // Clear out storage
+                    window.location.href = "index.html";   // Return to catalog
                 } else {
                     alert("Payment Failed at checkout gateway.");
                 }
@@ -103,26 +61,6 @@
             }
         }
     </script>
-    
-   
-    <script>
-    /*
-        document.addEventListener("DOMContentLoaded", function() {
-            const userEmail = localStorage.getItem("logged_in_email");
-            const emailDisplayElement = document.getElementById("disp-user-email");
-            
-            if (emailDisplayElement) {
-                emailDisplayElement.textContent = userEmail || "Not logged in";
-            }
-        });
-    */
-    </script>
-    
-    
-    
-    
-    
-    
 </head>
 <body>
 

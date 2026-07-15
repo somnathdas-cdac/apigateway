@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout</title>
+    
+    <!-- FIXED: Pointing to the official Stripe V3 JS runtime SDK library -->
+    <script src="https://stripe.com"></script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f7f9fc; margin: 0; }
+        .payment-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { margin-bottom: 20px; color: #333; }
+        #submit-btn { background-color: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        #submit-btn:disabled { background-color: #cccccc; cursor: not-allowed; }
+        #error-message { color: #dc3545; margin-top: 15px; font-size: 14px; text-align: center; }
+        #loading-text { color: #666; text-align: center; margin-bottom: 15px; }
+    </style>
+
+    <script>
+        const stripe = Stripe('pk_test_51TpSCeL7dr4OOdXh19yu9I8dSYgSbnc7t4zJh1D3LrRdWhrR0GXW2keq2I0YeJ09m8x8GFbeVo37P8HpVWXdYtq400ZNJ2Lkjq'); 
+        let elements;
+
+        window.onload = function() {
+            initializePaymentPage();
+        };
+
+        async function initializePaymentPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+            const productId = urlParams.get('productId');
+            const amount = urlParams.get('amount');
+            
+            const cachedOrder = JSON.parse(localStorage.getItem("latestOrder")) || {};
+            const userEmail = cachedOrder.email || "customer@example.com";
+
+            if (!orderId || !amount) {
+                document.getElementById('loading-text').innerHTML = "<strong>Error:</strong> Missing payment parameters in URL.";
+                return;
+            }
+
+            try {
+                const amountInCents = Math.round(parseFloat(amount) * 100);
+                
+                elements = stripe.elements({
+                    mode: 'payment',
+                    amount: amountInCents,
+                    currency: 'usd',
+                });
+
+                const paymentElement = elements.create('payment');
+                paymentElement.mount('#payment-element');
+
+                document.getElementById('payment-form').style.display = 'block';
+                document.getElementById('loading-text').style.display = 'none';
+
+                const paymentPayload = {
+                    orderId: parseInt(orderId),
+                    productId: productId ? parseInt(productId) : 1,
+                    amount: parseFloat(amount),
+                    userEmail: userEmail
+                };
+
+                setupFormSubmission(paymentPayload);
+            } catch (error) {
+                console.error("Initialization error:", error);
+                document.getElementById('loading-text').innerHTML = "Failed to load payment fields.";
+            }
+        }
+
+        function setupFormSubmission(payload) {
+            const form = document.getElementById('payment-form');
+            const submitBtn = document.getElementById('submit-btn');
+
+            form.onsubmit = async function(event) {
+                event.preventDefault();
+                submitBtn.disabled = true;
+
+                const { error: submitError } = await elements.submit();
+                if (submitError) {
+                    showError(submitError.message);
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                const { confirmationToken, error: tokenError } = await stripe.createConfirmationToken({
+                    elements,
+                    params: { payment_method_data: { billing_details: { email: payload.userEmail } } }
+                });
+
+                if (tokenError) {
+                    showError(tokenError.message);
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                payload.confirmationTokenId = confirmationToken.id;
+
+                try {
+                    const response = await fetch('/payment-service/api/payments/confirmPayment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.status === "succeeded") {
+                        window.location.href = window.location.origin + '/order-confirmation.html?status=success';
+                    } else {
+                        showError(result.message || "Transaction authorization failed.");
+                        submitBtn.disabled = false;
+                    }
+                } catch (backendError) {
+                    showError("Server connectivity loss. Try again shortly.");
+                    submitBtn.disabled = false;
+                }
+            };
+        }
+
+        function showError(msg) {
+            document.getElementById('error-message').innerHTML = '<span style="color:red;">' + msg + '</span>';
+        }
+    </script>
+</head>
+<body>
+
+<div class="payment-container">
+    <h2>Secure Payment</h2>
+    <div id="loading-text">Loading secure payment fields...</div>
+    
+    <form id="payment-form" style="display: none;">
+        <div id="payment-element"><!-- Stripe injects inputs here --></div>
+        <button id="submit-btn">Pay Now</button>
+        <div id="error-message"></div>
+    </form>
+</div>
+
+</body>
+</html>
