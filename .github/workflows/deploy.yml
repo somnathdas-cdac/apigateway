@@ -1,10 +1,9 @@
-
 name: CI/CD Pipeline - Deploy to Oracle Cloud
 
 on:
   push:
     branches:
-      - main  # Adjust this if your default branch is different (e.g., master)
+      - main
 
 jobs:
   build-and-push:
@@ -44,26 +43,26 @@ jobs:
           username: ${{ secrets.OCI_VM_USER }}
           key: ${{ secrets.OCI_SSH_KEY }}
           script: |
-            # Log in to Docker Hub on the remote VM
-            echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+            # 1. Log in to Docker Hub using sudo
+            echo "${{ secrets.REGISTRY_PASSWORD }}" | sudo docker login -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
             
-            # Stop and remove existing gateway container if running
-            docker stop api-gateway || true
-            docker rm api-gateway || true
+            # 2. Stop and remove existing container instances safely using sudo
+            sudo docker stop api-gateway || true
+            sudo docker rm api-gateway || true
             
-            # Pull the freshly built image
-            docker pull ${{ secrets.REGISTRY_USERNAME }}/api-gateway:latest
+            # 3. Pull the updated image version using sudo
+            sudo docker pull ${{ secrets.REGISTRY_USERNAME }}/api-gateway:latest
             
-            # Prune obsolete dangling images to save disk space
-            docker image prune -f
+            # 4. Clean up any leftover image fragments using sudo
+            sudo docker image prune -f
             
-            # Run the container with your required property mappings
-            docker run -d \
+            # 5. Spin up the API Gateway container targeting local services
+            sudo docker run -d \
               --name api-gateway \
               -p 8080:8080 \
               -e SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_DISCOVERY_LOCATOR_ENABLED=true \
-              -e EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://<YOUR_EUREKA_SERVER_IP>:8761/eureka/ \
-              -e SPRING_R2DBC_URL=r2dbc:mysql://<YOUR_DB_SERVER_IP>:3306/micro_service_user_db \
+              -e EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://127.0.0 \
+              -e SPRING_R2DBC_URL=r2dbc:mysql://127.0.0.1:3306/micro_service_user_db \
               -e SPRING_R2DBC_USERNAME=root \
               -e SPRING_R2DBC_PASSWORD=Som1234567 \
               --restart always \
