@@ -112,6 +112,7 @@ public class ViewController {
     import org.springframework.web.bind.annotation.PostMapping;
     import org.springframework.web.bind.annotation.RequestBody;
     import org.springframework.web.bind.annotation.ResponseBody;
+    import org.springframework.web.bind.annotation.RestController;
     import org.springframework.web.reactive.function.client.WebClient;
     import org.springframework.http.ResponseEntity;
     import org.springframework.http.HttpStatus;
@@ -126,7 +127,8 @@ import com.microservice.ecart.apigateway.model.UserApp;
 
     
 
-    @Controller
+   // @Controller
+    @RestController
     public class ViewController {
 
         private final UserAppRepository userAppRepository;

@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mock Checkout (Testing Mode)</title>
+    <title>Secure Checkout</title>
+    
+    <!-- FIXED: Pointing to the actual functional Stripe V3 JS runtime SDK library -->
+    <script src="https://stripe.com"></script>
     
     <style>
         body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f7f9fc; margin: 0; }
         .payment-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
-        h2 { margin-bottom: 5px; color: #333; }
-        .test-badge { background-color: #ffc107; color: #000; padding: 3px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; display: inline-block; margin-bottom: 20px; }
-        #submit-btn { background-color: #28a745; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        h2 { margin-bottom: 20px; color: #333; }
+        #submit-btn { background-color: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
         #submit-btn:disabled { background-color: #cccccc; cursor: not-allowed; }
         #error-message { color: #dc3545; margin-top: 15px; font-size: 14px; text-align: center; }
         #loading-text { color: #666; text-align: center; margin-bottom: 15px; }
-        .mock-input-group { margin-bottom: 15px; }
-        .mock-input-group label { display: block; font-size: 14px; color: #555; margin-bottom: 5px; font-weight: bold; }
-        .mock-input-group input { width: 94%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
-        .order-summary-box { background-color: #f1f3f5; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 14px; color: #495057; }
     </style>
 
     <script>
+        const stripe = Stripe('pk_test_51TpSCeL7dr4OOdXh19yu9I8dSYgSbnc7t4zJh1D3LrRdWhrR0GXW2keq2I0YeJ09m8x8GFbeVo37P8HpVWXdYtq400ZNJ2Lkjq'); 
+        let elements;
+
         window.onload = function() {
             initializePaymentPage();
         };
@@ -39,16 +40,25 @@
                 return;
             }
 
+          //-------------------------------------------------------------------------  
+            
+            
             try {
-                // Display the captured URL values inside our mockup summary panel
-                document.getElementById('summary-order-id').textContent = orderId;
-                document.getElementById('summary-amount').textContent = amount;
+                const amountInCents = Math.round(parseFloat(amount) * 100);
+                
+                elements = stripe.elements({
+                    mode: 'payment',
+                    amount: amountInCents,
+                    currency: 'usd',
+                    payment_method_types: ['card'], 
+                });
 
-                // Hide loading text and display the mock form instantly without Stripe
+                const paymentElement = elements.create('payment');
+                paymentElement.mount('#payment-element');
+
                 document.getElementById('payment-form').style.display = 'block';
                 document.getElementById('loading-text').style.display = 'none';
 
-                // Construct standard payload structure
                 const paymentPayload = {
                     orderId: parseInt(orderId),
                     productId: productId ? parseInt(productId) : 1,
@@ -56,11 +66,12 @@
                     userEmail: userEmail
                 };
 
-                setupFormSubmission(paymentPayload);
+                setupFormSubmission(paymentPayload);  //calling function
+                
                 
             } catch (error) {
                 console.error("Initialization error:", error);
-                document.getElementById('loading-text').innerHTML = "Failed to load mock fields.";
+                document.getElementById('loading-text').innerHTML = "Failed to load payment fields.";
             }
         }
 
@@ -71,13 +82,28 @@
             form.onsubmit = async function(event) {
                 event.preventDefault();
                 submitBtn.disabled = true;
-                showError("Processing simulated transaction...");
 
-                // Simulate a successful confirmation token string without talking to Stripe
-                payload.confirmationTokenId = "ct_mock_test_token_" + Math.random().toString(36).substr(2, 9);
+                const { error: submitError } = await elements.submit();
+                if (submitError) {
+                    showError(submitError.message);
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                const { confirmationToken, error: tokenError } = await stripe.createConfirmationToken({
+                    elements,
+                    params: { payment_method_data: { billing_details: { email: payload.userEmail } } }
+                });
+
+                if (tokenError) {
+                    showError(tokenError.message);
+                    submitBtn.disabled = false;
+                    return;
+                }
+
+                payload.confirmationTokenId = confirmationToken.id;
 
                 try {
-                    // Forward directly to your microservice confirmPayment API route
                     const response = await fetch('/payment-service/api/payments/confirmPayment', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -89,18 +115,18 @@
                     if (response.ok && result.status === "succeeded") {
                         window.location.href = window.location.origin + '/order-confirmation.html?status=success';
                     } else {
-                        showError(result.message || "Mock Transaction execution rejected by backend server.");
+                        showError(result.message || "Transaction authorization failed.");
                         submitBtn.disabled = false;
                     }
                 } catch (backendError) {
-                    showError("Microservice Connection Loss: Could not reach target REST endpoint via Gateway.");
+                    showError("Server connectivity loss. Try again shortly.");
                     submitBtn.disabled = false;
                 }
             };
         }
 
         function showError(msg) {
-            document.getElementById('error-message').innerHTML = '<span>' + msg + '</span>';
+            document.getElementById('error-message').innerHTML = '<span style="color:red;">' + msg + '</span>';
         }
     </script>
 </head>
@@ -108,35 +134,12 @@
 
 <div class="payment-container">
     <h2>Secure Payment</h2>
-    <div class="test-badge">OFFLINE TEST ENVIRONMENT</div>
-    
     <div id="loading-text">Loading secure payment fields...</div>
     
     <form id="payment-form" style="display: none;">
-        <div class="order-summary-box">
-            <strong>Order Reference ID:</strong> <span id="summary-order-id">--</span><br>
-            <strong>Simulated Charge Value:</strong> $<span id="summary-amount">0.00</span>
-        </div>
-
-        <!-- Simulated Card UI Layout -->
-        <div class="mock-input-group">
-            <label>Card Number</label>
-            <input type="text" placeholder="4242 4242 4242 4242" value="4242 4242 4242 4242" required>
-        </div>
-        
-        <div style="display: flex; gap: 10px;">
-            <div class="mock-input-group" style="flex: 1;">
-                <label>Expiration</label>
-                <input type="text" placeholder="MM / YY" value="12 / 30" required>
-            </div>
-            <div class="mock-input-group" style="flex: 1;">
-                <label>CVC</label>
-                <input type="text" placeholder="123" value="123" required>
-            </div>
-        </div>
-
-        <button id="submit-btn">Pay Now (Simulated)</button>
-        <div id="error-message" style="color: #666; font-style: italic;"></div>
+        <div id="payment-element"><!-- Stripe injects inputs here --></div>
+        <button id="submit-btn">Pay Now</button>
+        <div id="error-message"></div>
     </form>
 </div>
 
