@@ -59,7 +59,6 @@ jobs:
             # 5. Spin up the API Gateway container targeting local services
             sudo docker run -d \
               --name api-gateway \
-              --network host \
               -p 8080:8080 \
               -e SPRING_CLOUD_GATEWAY_SERVER_WEBFLUX_DISCOVERY_LOCATOR_ENABLED=true \
               -e EUREKA_CLIENT_SERVICE-URL_DEFAULTZONE=http://127.0.0 \
